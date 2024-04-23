@@ -24,7 +24,7 @@ export default function Index() {
   console.log('Index ~ pokemonList:', pokemonList);
 
   return (
-    <div className="flex flex-col h-screen bg-red-500">
+    <div className="flex flex-col h-dvh bg-red-500">
       <div className="flex-none py-5">
         <h1 className="text-3xl font-bold tracking-tight text-center mb-6">
           Pokedex
