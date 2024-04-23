@@ -1,24 +1,53 @@
 import { Link } from '@remix-run/react';
+import { PokemonListEntryType } from '~/types/pokemon';
 
 type PokemonListEntryProps = {
-  pokemon: {
-    number: number;
-    name: string;
-    photoUrl: string;
-    type: string[];
-  };
+  pokemon: PokemonListEntryType;
 };
 
-type BgColorType = {
+function PokemonListEntry({ pokemon }: PokemonListEntryProps) {
+  const primaryType = pokemon.type[0];
+  const typeColor = typeColors[primaryType];
+
+  return (
+    <Link
+      to={`pokemon/${pokemon.name}`}
+      className={`rounded-xl p-4 text-white ${typeColor}`}
+    >
+      <div className="flex justify-between mb-2 font-bold tracking-tight">
+        <h2 className="capitalize text-xl">{pokemon.name}</h2>
+        <h3 className="opacity-50">{`#0${pokemon.number}`}</h3>
+      </div>
+      <div className="grid grid-cols-2">
+        <li className="space-y-2">
+          {pokemon.type.map((type) => (
+            <div key={pokemon.name}>
+              <span className="bg-slate-500 opacity-50 px-2 py-1 rounded-xl text-sm">
+                {type}
+              </span>
+            </div>
+          ))}
+        </li>
+        <img
+          src={pokemon.photoUrl}
+          alt=""
+          className="max-h-32"
+        />
+      </div>
+    </Link>
+  );
+}
+
+export default PokemonListEntry;
+
+const typeColors: {
   [key: string]: string;
-};
-
-const bgColors: BgColorType = {
+} = {
   normal: 'bg-gray-300',
   fire: 'bg-red-400',
   water: 'bg-blue-400',
   electric: 'bg-yellow-400',
-  grass: 'bg-green-400',
+  grass: 'bg-teal-400',
   ice: 'bg-blue-200',
   fighting: 'bg-red-600',
   poison: 'bg-purple-500',
@@ -33,34 +62,3 @@ const bgColors: BgColorType = {
   steel: 'bg-gray-400',
   fairy: 'bg-pink-400',
 };
-
-function PokemonListEntry({ pokemon }: PokemonListEntryProps) {
-  const primaryType = pokemon.type[0];
-
-  const bgColor = bgColors[primaryType];
-
-  return (
-    <Link to={`pokemon/${pokemon.name}`}>
-      <li
-        key={pokemon.number}
-        className={`p-4 pb-1 rounded-xl ${bgColor}  text-white max-h-32`}
-      >
-        <div className="flex justify-between">
-          <h2 className="capitalize">{pokemon.name}</h2>
-          <p>{`#${pokemon.number}`}</p>
-        </div>
-        <div className="grid grid-cols-2">
-          <ul>Types</ul>
-
-          <img
-            src={pokemon.photoUrl}
-            alt=""
-            className="h-auto"
-          />
-        </div>
-      </li>
-    </Link>
-  );
-}
-
-export default PokemonListEntry;

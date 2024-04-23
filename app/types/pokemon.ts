@@ -9,3 +9,5 @@ export type PokemonListEntryType = {
   photoUrl: string;
   type: string[];
 };
+
+export type PokemonListType = PokemonListEntryType[];

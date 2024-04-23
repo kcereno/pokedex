@@ -1,14 +1,15 @@
 import PokemonListEntry from './PokemonListEntry';
-import { PokemonListEntryType } from '~/types/pokemon';
+import { PokemonListType } from '~/types/pokemon';
 
 type PokemonListProps = {
-  pokemon: PokemonListEntryType[];
+  pokemonList: PokemonListType;
 };
 
-const PokemonList = ({ pokemon }: PokemonListProps) => {
+const PokemonList = ({ pokemonList }: PokemonListProps) => {
+  console.log('PokemonList ~ pokemon:', pokemonList);
   return (
-    <ul className="grid grid-cols-2 gap-2">
-      {pokemon.map((pokemon) => (
+    <ul className="grid grid-cols-2 gap-2 p-2">
+      {pokemonList.map((pokemon) => (
         <PokemonListEntry
           key={pokemon.number}
           pokemon={pokemon}

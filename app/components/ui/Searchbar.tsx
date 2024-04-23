@@ -1,6 +1,8 @@
+import { Form } from '@remix-run/react';
+
 const Searchbar = () => {
   return (
-    <form className="flex items-center w-auto mx-auto px-4">
+    <Form className="flex items-center w-auto mx-auto px-4">
       <label
         htmlFor="simple-search"
         className="sr-only"
@@ -54,7 +56,7 @@ const Searchbar = () => {
         </svg>
         <span className="sr-only">Search</span>
       </button>
-    </form>
+    </Form>
   );
 };
 
