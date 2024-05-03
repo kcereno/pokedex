@@ -1,10 +1,12 @@
 import { json, type MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import PokemonList from '~/components/PokemonList';
+import { useLoaderData, useNavigation } from '@remix-run/react';
 
-import Searchbar from '~/components/ui/Searchbar';
 import { PokemonListType } from '~/types/pokemon';
 import { fetchPokemonList } from '~/utils/fetchers';
+
+import PokemonGrid from '~/components/PokemonGrid';
+import Nav from '~/components/Nav';
+import Searchbar from '~/components/Searchbar';
 
 export const meta: MetaFunction = () => {
   return [
@@ -14,26 +16,28 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader = async () => {
-  const pokemonList: PokemonListType = await fetchPokemonList();
+  const pokemon: PokemonListType = await fetchPokemonList();
 
-  return json(pokemonList);
+  return json({ pokemon });
 };
 
 export default function Index() {
-  const pokemonList = useLoaderData<typeof loader>();
-  console.log('Index ~ pokemonList:', pokemonList);
+  const { pokemon } = useLoaderData<typeof loader>();
+  // const navigation = useNavigation();
+
+  // const isLoading = navigation.state === 'loading';
 
   return (
-    <div className="flex flex-col h-dvh bg-red-500">
-      <div className="flex-none py-5">
-        <h1 className="text-3xl font-bold tracking-tight text-center mb-6">
-          Pokedex
-        </h1>
-        <Searchbar />
-      </div>
-      <div className="flex-grow overflow-y-auto mx-2 bg-slate-100 rounded-xl">
-        <PokemonList pokemonList={pokemonList} />
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Nav />
+      <main>
+        <Searchbar className="pt-4" />
+        {/* TODO: Add Loading Spinner  */}
+        <PokemonGrid
+          className=""
+          pokemon={pokemon}
+        />
+      </main>
     </div>
   );
 }
