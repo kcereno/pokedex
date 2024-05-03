@@ -8,7 +8,7 @@ type SearchBarProps = {
 
 const Searchbar = ({ className = '' }: SearchBarProps) => {
   return (
-    <form className={twMerge('flex items-center max-w-sm mx-auto', className)}>
+    <form className={twMerge('flex items-center mx-auto', className)}>
       <label
         htmlFor="simple-search"
         className="sr-only"

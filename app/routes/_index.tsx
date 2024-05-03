@@ -31,12 +31,9 @@ export default function Index() {
     <div className="min-h-screen flex flex-col">
       <Nav />
       <main>
-        <Searchbar className="pt-4" />
+        <Searchbar className="p-4 pb-0" />
         {/* TODO: Add Loading Spinner  */}
-        <PokemonGrid
-          className=""
-          pokemon={pokemon}
-        />
+        <PokemonGrid pokemon={pokemon} />
       </main>
     </div>
   );
