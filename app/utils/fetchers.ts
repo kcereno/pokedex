@@ -3,9 +3,11 @@ import { PokemonListType } from '~/types/pokemon';
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
   const response = await fetch(api);
-  const data = await response.json();
+  const { results } = await response.json();
 
-  const { results } = data;
+  if (!results) {
+    throw new Error('Unable to fetch data');
+  }
 
   const pokemonList: PokemonListType = await Promise.all(
     results.map(
@@ -18,6 +20,10 @@ export const fetchPokemonList = async () => {
       ) => {
         const response = await fetch(entry.url);
         const data = await response.json();
+
+        if (!data) {
+          throw new Error('Unable to fetch data');
+        }
 
         const photoUrl = data.sprites.other['official-artwork'].front_default;
         const type: string[] = data.types.map(
@@ -39,4 +45,13 @@ export const fetchPokemonList = async () => {
   );
 
   return pokemonList;
+};
+
+export const fetchPokemonData = async (pokemon: string) => {
+  const api = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
+
+  const response = await fetch(api);
+  const data = await response.json();
+
+  return data;
 };
