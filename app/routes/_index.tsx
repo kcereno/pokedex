@@ -1,5 +1,5 @@
 import { json, type MetaFunction } from '@remix-run/node';
-import { useLoaderData, useNavigation } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 
 import { PokemonListType } from '~/types/pokemon';
 import { fetchPokemonList } from '~/utils/fetchers';

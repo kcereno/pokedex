@@ -1,10 +1,16 @@
 import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { fetchPokemonData, getPokemonSpeciesData } from '~/utils/fetchers';
+import {
+  fetchFromUrl,
+  fetchPokemonData,
+  getPokemonSpeciesData,
+} from '~/utils/fetchers';
 import invariant from 'tiny-invariant';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   decimetersToFeet,
+  EvolutionChain,
+  extractEvolutionInfo,
   hectogramsToPounds,
   transformToThreeDigits,
 } from '~/utils/transformers';
@@ -15,29 +21,46 @@ import TypePill from '~/components/TypePill';
 import { useState } from 'react';
 import { RiRulerLine, RiWeightLine } from 'react-icons/ri';
 import BaseStat from '~/components/BaseStat';
+import { EvolutionChainApiResponse } from '~/types/api';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
   const pokemon: PokemonDetails = await fetchPokemonData(params.pokemon);
   const specieData = await getPokemonSpeciesData(params.pokemon);
+  const evolutionChainUrl = specieData.evolution_chain.url;
 
-  return json({ pokemon, specieData });
+  const evolutionChainData: EvolutionChain = await fetchFromUrl(
+    evolutionChainUrl
+  );
+  const tranformedData = extractEvolutionInfo(evolutionChainData);
+  console.log('loader ~ tranformedData:', tranformedData);
+
+  return json({
+    pokemon,
+    specieData,
+    evolutionChainData,
+  });
 };
 
 function IndividualPokemonPage() {
   const [currentTab, setCurrentTab] = useState<'Base Stats' | 'Evolution'>(
     'Base Stats'
   );
-  const { pokemon, specieData } = useLoaderData<typeof loader>();
-  console.log('IndividualPokemonPage ~ pokemon:', pokemon);
-  const typeColor = pokemonTypeColors[pokemon.types[0].type.name];
-  console.log('IndividualPokemonPage ~ typeColor:', typeColor);
-  const aboutText = specieData.data['flavor_text_entries'][4]['flavor_text'];
+  const { pokemon, specieData, evolutionChainData } =
+    useLoaderData<typeof loader>();
+  console.log(
+    'IndividualPokemonPage ~ evolutionChainData:',
+    evolutionChainData
+  );
+
+  const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
+  const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
+  const aboutText = specieData['flavor_text_entries'][4]['flavor_text'];
 
   const tabs: ('Base Stats' | 'Evolution')[] = ['Base Stats', 'Evolution'];
 
   return (
-    <div className={`flex flex-col min-h-screen bg-${typeColor}`}>
+    <div className={`flex flex-col min-h-screen ${bgColor}`}>
       <div className="flex pt-6 px-6">
         <Link to={'/'}>
           <FaArrowLeft className="text-xl text-white" />
@@ -75,9 +98,7 @@ function IndividualPokemonPage() {
         </ul>
         {/* About */}
         <div className="flex flex-col items-center my-6">
-          <h2
-            className={`font-semibold text-xl tracking-tight text-${typeColor}`}
-          >
+          <h2 className={`font-semibold text-xl tracking-tight ${textColor}`}>
             About
           </h2>
           <div className="grid grid-cols-2 divide-x  mt-4 w-4/5">
@@ -102,13 +123,14 @@ function IndividualPokemonPage() {
           </div>
           <p className="mt-6">{aboutText}</p>
         </div>
+
         {/* Tabs */}
         <ul className="flex justify-center gap-10 text-gray-400 border-b-2 pb-4 my-6">
           {tabs.map((tab) => (
             <li key={tab}>
               <button
                 className={
-                  currentTab === tab ? `font-semibold text-${typeColor}` : ''
+                  currentTab === tab ? `font-semibold ${textColor}` : ''
                 }
                 onClick={() => {
                   setCurrentTab(tab);
@@ -120,16 +142,20 @@ function IndividualPokemonPage() {
           ))}
         </ul>
 
-        <div>
-          {pokemon.stats.map((stat) => (
-            <BaseStat
-              key={stat.stat.name}
-              label={stat.stat.name}
-              value={stat.base_stat}
-              color={typeColor}
-            />
-          ))}
-        </div>
+        {currentTab === 'Base Stats' ? (
+          <div>
+            {pokemon.stats.map((stat) => (
+              <BaseStat
+                key={stat.stat.name}
+                label={stat.stat.name}
+                value={stat.base_stat}
+                color={bgColor}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        {currentTab === 'Evolution' ? <div></div> : null}
       </div>
     </div>
   );

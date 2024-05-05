@@ -1,3 +1,4 @@
+import { SpeciesData } from '~/types/api';
 import { PokemonListType } from '~/types/pokemon';
 
 export const fetchPokemonList = async () => {
@@ -60,10 +61,33 @@ export const getPokemonSpeciesData = async (pokemon: string) => {
   const api = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`;
 
   const response = await fetch(api);
+  const data: SpeciesData = await response.json();
+
+  if (!data) {
+    throw new Error('No data');
+  }
+  return data;
+};
+
+export const getEvolutionData = async (pokemon: number) => {
+  const api = `https://pokeapi.co/api/v2/evolution-chain/${pokemon}/`;
+
+  const response = await fetch(api);
   const data = await response.json();
 
   if (!data) {
     throw new Error('No data');
   }
-  return { data };
+  return data;
+};
+
+export const fetchFromUrl = async (url: string) => {
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (!data) {
+    throw new Error('No data');
+  }
+
+  return data;
 };

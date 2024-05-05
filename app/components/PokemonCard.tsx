@@ -5,7 +5,7 @@ import { transformToThreeDigits } from '~/utils/transformers';
 
 function PokemonCard({ name, number, photoUrl, type }: PokemonListEntryType) {
   const primaryType: string = type[0];
-  const bgColor: string = pokemonTypeColors[primaryType];
+  const bgColor: string = pokemonTypeColors[primaryType].bgColor;
 
   return (
     <li

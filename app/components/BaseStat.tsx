@@ -15,16 +15,11 @@ const statAbbreviations: {
   'special-attack': 'SATK',
   'special-defense': 'SDEF',
   speed: 'SPD',
-  // Add more mappings as needed
 };
 
 function BaseStat({ label, color, value }: BaseStatProps) {
-  const bgColor = `bg-${color}`;
-  const width = `w-[${value}%]`;
   const statAbbreviation = statAbbreviations[label];
 
-  console.log('BaseStat ~ width:', width);
-  console.log('BaseStat ~ bgColor:', bgColor);
   return (
     <div className="grid grid-cols-[50px,1fr] ">
       <div
@@ -38,7 +33,7 @@ function BaseStat({ label, color, value }: BaseStatProps) {
         </span>
         <div className={'w-full bg-gray-300 rounded-full ml-2'}>
           <div
-            className={`h-2 ${bgColor} rounded-full`}
+            className={`h-2 ${color} rounded-full`}
             style={{ width: `${value}%` }}
           ></div>
         </div>
