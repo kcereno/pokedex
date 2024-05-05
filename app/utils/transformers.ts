@@ -1,3 +1,6 @@
+import { Chain, EvolutionChainApiResponse } from '~/types/api';
+import { EvolutionData } from '~/types/pokemon';
+
 export function transformToThreeDigits(number: number): string {
   return number.toString().padStart(3, '0');
 }
@@ -12,56 +15,8 @@ export function decimetersToFeet(decimeters: number): number {
   return Math.round(decimeters * 0.328084 * 10) / 10;
 }
 
-// test
-export type EvolutionChain = {
-  baby_trigger_item: string | null;
-  chain: Chain;
-  id: number;
-};
-
-type Chain = {
-  evolution_details: EvolutionDetails[];
-  evolves_to: Chain[];
-  is_baby: boolean;
-  species: Species;
-};
-
-type EvolutionDetails = {
-  min_level: number;
-  trigger: Trigger;
-  item: Item | null;
-};
-
-type Trigger = {
-  name: string;
-  url: string;
-};
-
-type Item = {
-  name: string | null;
-  url: string | null;
-};
-
-type Species = {
-  name: string;
-  url: string;
-};
-
-export type EvolutionData = {
-  pokemon: {
-    name: string;
-    url: string;
-  };
-  item: {
-    name: string | null;
-    url: string | null;
-  };
-  min_level: number;
-  trigger: string;
-};
-
 export function extractEvolutionInfo(
-  evolutionChain: EvolutionChain
+  evolutionChain: EvolutionChainApiResponse
 ): EvolutionData[] {
   const result: EvolutionData[] = [];
 

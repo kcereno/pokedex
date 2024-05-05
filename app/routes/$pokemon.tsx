@@ -9,36 +9,42 @@ import invariant from 'tiny-invariant';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   decimetersToFeet,
-  EvolutionChain,
   extractEvolutionInfo,
   hectogramsToPounds,
   transformToThreeDigits,
 } from '~/utils/transformers';
 import { pokemonTypeColors } from '~/constants/constants';
-import { PokemonDetails } from '~/types/pokemon';
+
 import TypePill from '~/components/TypePill';
 
 import { useState } from 'react';
 import { RiRulerLine, RiWeightLine } from 'react-icons/ri';
 import BaseStat from '~/components/BaseStat';
-import { EvolutionChainApiResponse } from '~/types/api';
+import {
+  EvolutionChainApiResponse,
+  PokemonDetailsAPiResponse,
+  SpeciesDataApiResponse,
+} from '~/types/api';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
-  const pokemon: PokemonDetails = await fetchPokemonData(params.pokemon);
-  const specieData = await getPokemonSpeciesData(params.pokemon);
-  const evolutionChainUrl = specieData.evolution_chain.url;
+  const pokemon: PokemonDetailsAPiResponse = await fetchPokemonData(
+    params.pokemon
+  );
+  const specie: SpeciesDataApiResponse = await getPokemonSpeciesData(
+    params.pokemon
+  );
+  const evolutionChainUrl = specie.evolution_chain.url;
 
-  const evolutionChainData: EvolutionChain = await fetchFromUrl(
+  const evolutionChainData: EvolutionChainApiResponse = await fetchFromUrl(
     evolutionChainUrl
   );
   const tranformedData = extractEvolutionInfo(evolutionChainData);
-  console.log('loader ~ tranformedData:', tranformedData);
 
   return json({
     pokemon,
-    specieData,
-    evolutionChainData,
+    specie,
+    evolutionChainData: tranformedData,
   });
 };
 
@@ -46,7 +52,7 @@ function IndividualPokemonPage() {
   const [currentTab, setCurrentTab] = useState<'Base Stats' | 'Evolution'>(
     'Base Stats'
   );
-  const { pokemon, specieData, evolutionChainData } =
+  const { pokemon, specie, evolutionChainData } =
     useLoaderData<typeof loader>();
   console.log(
     'IndividualPokemonPage ~ evolutionChainData:',
@@ -55,7 +61,7 @@ function IndividualPokemonPage() {
 
   const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
   const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
-  const aboutText = specieData['flavor_text_entries'][4]['flavor_text'];
+  const aboutText = specie['flavor_text_entries'][4]['flavor_text'];
 
   const tabs: ('Base Stats' | 'Evolution')[] = ['Base Stats', 'Evolution'];
 

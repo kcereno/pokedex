@@ -12,25 +12,15 @@ export type PokemonListEntryType = {
 
 export type PokemonListType = PokemonListEntryType[];
 
-export type PokemonDetails = {
-  id: number;
-  name: string;
-  height: number;
-  weight: number;
-  stats: {
-    base_stat: number;
-    stat: { name: string };
-  }[];
-  types: {
-    type: {
-      name: string;
-    };
-  }[];
-  sprites: {
-    other: {
-      'official-artwork': {
-        front_default: string;
-      };
-    };
+export type EvolutionData = {
+  pokemon: {
+    name: string;
+    url: string;
   };
+  item: {
+    name: string | null;
+    url: string | null;
+  };
+  min_level: number;
+  trigger: string;
 };

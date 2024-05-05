@@ -7,7 +7,30 @@ export type PokemonAPIResponse = {
   results: Pokemon[];
 };
 
-export type SpeciesData = {
+export type PokemonDetailsAPiResponse = {
+  id: number;
+  name: string;
+  height: number;
+  weight: number;
+  stats: {
+    base_stat: number;
+    stat: { name: string };
+  }[];
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
+  sprites: {
+    other: {
+      'official-artwork': {
+        front_default: string;
+      };
+    };
+  };
+};
+
+export type SpeciesDataApiResponse = {
   evolution_chain: {
     url: string;
   };
@@ -16,27 +39,36 @@ export type SpeciesData = {
   }[];
 };
 
+export type Chain = {
+  evolution_details: EvolutionDetails[];
+  evolves_to: Chain[];
+  is_baby: boolean;
+  species: Species;
+};
+
+type EvolutionDetails = {
+  min_level: number;
+  trigger: Trigger;
+  item: Item | null;
+};
+
+type Trigger = {
+  name: string;
+  url: string;
+};
+
+type Item = {
+  name: string | null;
+  url: string | null;
+};
+
 type Species = {
   name: string;
   url: string;
 };
 
-type EvolutionDetails = {
-  min_level: number;
-  trigger: {
-    name: string;
-  };
-}[];
-
-type EvolvesTo = {
-  species: Species;
-  evolves_to: EvolvesTo;
-};
-
 export type EvolutionChainApiResponse = {
-  chain: {
-    evolution_details: EvolutionDetails;
-    species: Species;
-    evolves_to: EvolvesTo;
-  };
+  baby_trigger_item: string | null;
+  chain: Chain;
+  id: number;
 };

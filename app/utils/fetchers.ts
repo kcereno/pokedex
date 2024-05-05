@@ -1,4 +1,4 @@
-import { SpeciesData } from '~/types/api';
+import { PokemonDetailsAPiResponse, SpeciesDataApiResponse } from '~/types/api';
 import { PokemonListType } from '~/types/pokemon';
 
 export const fetchPokemonList = async () => {
@@ -52,7 +52,7 @@ export const fetchPokemonData = async (pokemon: string) => {
   const api = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
 
   const response = await fetch(api);
-  const data = await response.json();
+  const data: PokemonDetailsAPiResponse = await response.json();
 
   return data;
 };
@@ -61,7 +61,7 @@ export const getPokemonSpeciesData = async (pokemon: string) => {
   const api = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`;
 
   const response = await fetch(api);
-  const data: SpeciesData = await response.json();
+  const data: SpeciesDataApiResponse = await response.json();
 
   if (!data) {
     throw new Error('No data');
