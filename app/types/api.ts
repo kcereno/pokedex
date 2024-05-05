@@ -7,6 +7,12 @@ export type PokemonAPIResponse = {
   results: Pokemon[];
 };
 
+export type PokemonTypes = {
+  type: {
+    name: string;
+  };
+}[];
+
 export type PokemonDetailsAPiResponse = {
   id: number;
   name: string;
@@ -16,11 +22,7 @@ export type PokemonDetailsAPiResponse = {
     base_stat: number;
     stat: { name: string };
   }[];
-  types: {
-    type: {
-      name: string;
-    };
-  }[];
+  types: PokemonTypes;
   sprites: {
     other: {
       'official-artwork': {

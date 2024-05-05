@@ -1,18 +1,16 @@
 import { LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { fetchPokemonData } from '~/utils/fetchers';
 import invariant from 'tiny-invariant';
-import { FaArrowLeft } from 'react-icons/fa';
-import {
-  decimetersToFeet,
-  hectogramsToPounds,
-  transformToThreeDigits,
-} from '~/utils/transformers';
 import { pokemonTypeColors } from '~/constants/constants';
-import TypePill from '~/components/TypePill';
 import { useState } from 'react';
-import { RiRulerLine, RiWeightLine } from 'react-icons/ri';
 import BaseStat from '~/components/BaseStat';
+import TypePills from '~/components/TypePills';
+import Nav from '~/components/PokemonPage/Nav';
+import HeaderAndImage from '~/components/PokemonPage/HeaderAndImage';
+import Metrics from '~/components/PokemonPage/Metrics';
+import { TabTypes } from '~/types/general';
+import Tabs from '~/components/PokemonPage/Tabs';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
@@ -21,9 +19,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 function IndividualPokemonPage() {
-  const [currentTab, setCurrentTab] = useState<'Base Stats' | 'Evolution'>(
-    'Base Stats'
-  );
+  const [currentTab, setCurrentTab] = useState<TabTypes>('Base Stats');
   const { pokemon, specie, evolutionChainData } =
     useLoaderData<typeof loader>();
   console.log(
@@ -34,92 +30,44 @@ function IndividualPokemonPage() {
   const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
   const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
   const aboutText = specie['flavor_text_entries'][4]['flavor_text'];
+  const imgUrl = pokemon.sprites.other['official-artwork'].front_default;
 
-  const tabs: ('Base Stats' | 'Evolution')[] = ['Base Stats', 'Evolution'];
+  const tabs: TabTypes[] = ['Base Stats', 'Evolution'];
 
   return (
     <div className={`flex flex-col min-h-screen ${bgColor}`}>
-      <div className="flex pt-6 px-6">
-        <Link to={'/'}>
-          <FaArrowLeft className="text-xl text-white" />
-        </Link>
-      </div>
-
-      <div className="px-6 mt-2">
-        {/* Name and Number */}
-        <div className="flex justify-between  items-center text-white font-bold ">
-          <span className="text-4xl capitalize tracking-tight">
-            {pokemon.name}
-          </span>
-          <span className="text-xl">{`#${transformToThreeDigits(
-            pokemon.id
-          )}`}</span>
-        </div>
-
-        {/* Image */}
-        <img
-          className="w-3/5 mx-auto"
-          src={pokemon.sprites.other['official-artwork'].front_default}
-          alt={pokemon.name}
-        />
-      </div>
+      <Nav />
+      <HeaderAndImage
+        id={pokemon.id}
+        name={pokemon.name}
+        imgUrl={imgUrl}
+      />
 
       <div className="p-6 rounded-t-xl bg-white flex-grow">
-        {/* Type */}
-        <ul className="flex gap-4 justify-center">
-          {pokemon.types.map(({ type }) => (
-            <TypePill
-              key={type.name}
-              type={type.name}
-            />
-          ))}
-        </ul>
-        {/* About */}
+        <TypePills types={pokemon.types} />
+        {/* Abouts */}
         <div className="flex flex-col items-center my-6">
           <h2 className={`font-semibold text-xl tracking-tight ${textColor}`}>
             About
           </h2>
-          <div className="grid grid-cols-2 divide-x  mt-4 w-4/5">
-            <div>
-              <div className="flex justify-center items-center gap-3">
-                <RiWeightLine className="text-sm" />
-                <span>{`${hectogramsToPounds(pokemon.weight)} lbs`}</span>
-              </div>
-              <div className="text-center mt-2 text-sm text-slate-600">
-                Weight
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-center items-center gap-3">
-                <RiRulerLine className="text-sm" />
-                <span>{`${decimetersToFeet(pokemon.height)} feet`}</span>
-              </div>
-              <div className="text-center mt-2 text-sm text-slate-600">
-                Height
-              </div>
-            </div>
-          </div>
+          <Metrics
+            height={pokemon.height}
+            weight={pokemon.weight}
+          />
           <p className="mt-6">{aboutText}</p>
         </div>
 
         {/* Tabs */}
-        <ul className="flex justify-center gap-10 text-gray-400 border-b-2 pb-4 my-6">
-          {tabs.map((tab) => (
-            <li key={tab}>
-              <button
-                className={
-                  currentTab === tab ? `font-semibold ${textColor}` : ''
-                }
-                onClick={() => {
-                  setCurrentTab(tab);
-                }}
-              >
-                {tab}
-              </button>
-            </li>
-          ))}
-        </ul>
+        <Tabs
+          tabs={tabs}
+          currentTab={currentTab}
+          textColor={textColor}
+          updateTab={(tab) => {
+            setCurrentTab(tab);
+          }}
+        />
 
+        {/* Tabs Content */}
         {currentTab === 'Base Stats' ? (
           <div>
             {pokemon.stats.map((stat) => (
