@@ -10,14 +10,14 @@ function PokemonCard({ name, number, photoUrl, type }: PokemonListEntryType) {
   return (
     <li
       key={number}
-      className={`p-4  pb-2 border w-full rounded-xl max-h-30 drop-shadow-2xl ${bgColor}`}
+      className={`p-4 pb-2 border w-full rounded-xl max-h-30 drop-shadow-2xl ${bgColor} flex flex-col`}
     >
       <Link to={name}>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <h2 className="capitalize font-bold tracking-tight text-white text-lg">
             {name}
           </h2>
-          <p className="text-slate-300 font-bold">{`#${transformToThreeDigits(
+          <p className="text-slate-300 font-bold text-sm">{`#${transformToThreeDigits(
             number
           )}`}</p>
         </div>
@@ -25,7 +25,7 @@ function PokemonCard({ name, number, photoUrl, type }: PokemonListEntryType) {
           <ul className="flex flex-col gap-2">
             {type.map((type) => (
               <li key={type}>
-                <span className="bg-slate-400 px-2 py-1 rounded-xl text-xs bg-opacity-50 text-white">
+                <span className="bg-slate-400 px-4 py-1 rounded-xl text-xs bg-opacity-50 text-white capitalize">
                   {type}
                 </span>
               </li>

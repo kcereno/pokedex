@@ -55,3 +55,15 @@ export const fetchPokemonData = async (pokemon: string) => {
 
   return data;
 };
+
+export const getPokemonSpeciesData = async (pokemon: string) => {
+  const api = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`;
+
+  const response = await fetch(api);
+  const data = await response.json();
+
+  if (!data) {
+    throw new Error('No data');
+  }
+  return { data };
+};
