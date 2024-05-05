@@ -1,5 +1,11 @@
-import { PokemonDetailsAPiResponse, SpeciesDataApiResponse } from '~/types/api';
+import {
+  EvolutionChainApiResponse,
+  PokemonDetailsAPiResponse,
+  SpeciesDataApiResponse,
+} from '~/types/api';
 import { PokemonListType } from '~/types/pokemon';
+import { extractEvolutionInfo } from './transformers';
+import { json } from '@remix-run/node';
 
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
@@ -48,7 +54,7 @@ export const fetchPokemonList = async () => {
   return pokemonList;
 };
 
-export const fetchPokemonData = async (pokemon: string) => {
+export const fetchPokemonDetails = async (pokemon: string) => {
   const api = `https://pokeapi.co/api/v2/pokemon/${pokemon}`;
 
   const response = await fetch(api);
@@ -57,23 +63,11 @@ export const fetchPokemonData = async (pokemon: string) => {
   return data;
 };
 
-export const getPokemonSpeciesData = async (pokemon: string) => {
+export const fetchPokemonSpeciesData = async (pokemon: string) => {
   const api = `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`;
 
   const response = await fetch(api);
   const data: SpeciesDataApiResponse = await response.json();
-
-  if (!data) {
-    throw new Error('No data');
-  }
-  return data;
-};
-
-export const getEvolutionData = async (pokemon: number) => {
-  const api = `https://pokeapi.co/api/v2/evolution-chain/${pokemon}/`;
-
-  const response = await fetch(api);
-  const data = await response.json();
 
   if (!data) {
     throw new Error('No data');
@@ -90,4 +84,23 @@ export const fetchFromUrl = async (url: string) => {
   }
 
   return data;
+};
+
+export const fetchPokemonData = async (pokemon: string) => {
+  const pokemonDetails: PokemonDetailsAPiResponse = await fetchPokemonDetails(
+    pokemon
+  );
+  const specie: SpeciesDataApiResponse = await fetchPokemonSpeciesData(pokemon);
+  const evolutionChainUrl = specie.evolution_chain.url;
+
+  const evolutionChainData: EvolutionChainApiResponse = await fetchFromUrl(
+    evolutionChainUrl
+  );
+  const tranformedData = extractEvolutionInfo(evolutionChainData);
+
+  return json({
+    pokemon: pokemonDetails,
+    specie,
+    evolutionChainData: tranformedData,
+  });
 };

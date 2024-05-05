@@ -1,51 +1,23 @@
-import { json, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import {
-  fetchFromUrl,
-  fetchPokemonData,
-  getPokemonSpeciesData,
-} from '~/utils/fetchers';
+import { fetchPokemonData } from '~/utils/fetchers';
 import invariant from 'tiny-invariant';
 import { FaArrowLeft } from 'react-icons/fa';
 import {
   decimetersToFeet,
-  extractEvolutionInfo,
   hectogramsToPounds,
   transformToThreeDigits,
 } from '~/utils/transformers';
 import { pokemonTypeColors } from '~/constants/constants';
-
 import TypePill from '~/components/TypePill';
-
 import { useState } from 'react';
 import { RiRulerLine, RiWeightLine } from 'react-icons/ri';
 import BaseStat from '~/components/BaseStat';
-import {
-  EvolutionChainApiResponse,
-  PokemonDetailsAPiResponse,
-  SpeciesDataApiResponse,
-} from '~/types/api';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
-  const pokemon: PokemonDetailsAPiResponse = await fetchPokemonData(
-    params.pokemon
-  );
-  const specie: SpeciesDataApiResponse = await getPokemonSpeciesData(
-    params.pokemon
-  );
-  const evolutionChainUrl = specie.evolution_chain.url;
 
-  const evolutionChainData: EvolutionChainApiResponse = await fetchFromUrl(
-    evolutionChainUrl
-  );
-  const tranformedData = extractEvolutionInfo(evolutionChainData);
-
-  return json({
-    pokemon,
-    specie,
-    evolutionChainData: tranformedData,
-  });
+  return await fetchPokemonData(params.pokemon);
 };
 
 function IndividualPokemonPage() {
