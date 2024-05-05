@@ -4,13 +4,14 @@ import { fetchPokemonData } from '~/utils/fetchers';
 import invariant from 'tiny-invariant';
 import { pokemonTypeColors } from '~/constants/constants';
 import { useState } from 'react';
-import BaseStat from '~/components/BaseStat';
 import TypePills from '~/components/TypePills';
 import Nav from '~/components/PokemonPage/Nav';
 import HeaderAndImage from '~/components/PokemonPage/HeaderAndImage';
 import Metrics from '~/components/PokemonPage/Metrics';
 import { TabTypes } from '~/types/general';
 import Tabs from '~/components/PokemonPage/Tabs';
+import BaseStats from '~/components/PokemonPage/BaseStats';
+import EvolutionChain from '~/components/PokemonPage/EvolutionChain';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
@@ -22,10 +23,6 @@ function IndividualPokemonPage() {
   const [currentTab, setCurrentTab] = useState<TabTypes>('Base Stats');
   const { pokemon, specie, evolutionChainData } =
     useLoaderData<typeof loader>();
-  console.log(
-    'IndividualPokemonPage ~ evolutionChainData:',
-    evolutionChainData
-  );
 
   const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
   const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
@@ -45,7 +42,7 @@ function IndividualPokemonPage() {
 
       <div className="p-6 rounded-t-xl bg-white flex-grow">
         <TypePills types={pokemon.types} />
-        {/* Abouts */}
+        {/* About */}
         <div className="flex flex-col items-center my-6">
           <h2 className={`font-semibold text-xl tracking-tight ${textColor}`}>
             About
@@ -60,8 +57,8 @@ function IndividualPokemonPage() {
         {/* Tabs */}
         <Tabs
           tabs={tabs}
-          currentTab={currentTab}
           textColor={textColor}
+          currentTab={currentTab}
           updateTab={(tab) => {
             setCurrentTab(tab);
           }}
@@ -69,19 +66,15 @@ function IndividualPokemonPage() {
 
         {/* Tabs Content */}
         {currentTab === 'Base Stats' ? (
-          <div>
-            {pokemon.stats.map((stat) => (
-              <BaseStat
-                key={stat.stat.name}
-                label={stat.stat.name}
-                value={stat.base_stat}
-                color={bgColor}
-              />
-            ))}
-          </div>
+          <BaseStats
+            stats={pokemon.stats}
+            bgColor={bgColor}
+          />
         ) : null}
 
-        {currentTab === 'Evolution' ? <div></div> : null}
+        {currentTab === 'Evolution' ? (
+          <EvolutionChain data={evolutionChainData} />
+        ) : null}
       </div>
     </div>
   );

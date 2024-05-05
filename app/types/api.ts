@@ -13,15 +13,17 @@ export type PokemonTypes = {
   };
 }[];
 
+export type PokemonStats = {
+  base_stat: number;
+  stat: { name: string };
+}[];
+
 export type PokemonDetailsAPiResponse = {
   id: number;
   name: string;
   height: number;
   weight: number;
-  stats: {
-    base_stat: number;
-    stat: { name: string };
-  }[];
+  stats: PokemonStats;
   types: PokemonTypes;
   sprites: {
     other: {
