@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { json, LoaderFunctionArgs } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { fetchPokemonData } from '~/utils/fetchers';
 import invariant from 'tiny-invariant';
@@ -11,23 +11,22 @@ import Metrics from '~/components/PokemonPage/Metrics';
 import { TabTypes } from '~/types/general';
 import Tabs from '~/components/PokemonPage/Tabs';
 import BaseStats from '~/components/PokemonPage/BaseStats';
-import EvolutionChain from '~/components/PokemonPage/EvolutionChain';
+
+import { PokemonData } from '~/types/pokemon';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
 
-  return await fetchPokemonData(params.pokemon);
+  const data: PokemonData = await fetchPokemonData(params.pokemon);
+  return json({ pokemon: data });
 };
 
 function IndividualPokemonPage() {
   const [currentTab, setCurrentTab] = useState<TabTypes>('Base Stats');
-  const { pokemon, specie, evolutionChainData } =
-    useLoaderData<typeof loader>();
+  const { pokemon } = useLoaderData<typeof loader>();
 
   const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
   const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
-  const aboutText = specie['flavor_text_entries'][4]['flavor_text'];
-  const imgUrl = pokemon.sprites.other['official-artwork'].front_default;
 
   const tabs: TabTypes[] = ['Base Stats', 'Evolution'];
 
@@ -37,21 +36,22 @@ function IndividualPokemonPage() {
       <HeaderAndImage
         id={pokemon.id}
         name={pokemon.name}
-        imgUrl={imgUrl}
+        imgUrl={pokemon.imgUrl}
       />
 
       <div className="p-6 rounded-t-xl bg-white flex-grow">
         <TypePills types={pokemon.types} />
+
         {/* About */}
         <div className="flex flex-col items-center my-6">
           <h2 className={`font-semibold text-xl tracking-tight ${textColor}`}>
             About
           </h2>
           <Metrics
-            height={pokemon.height}
-            weight={pokemon.weight}
+            height={pokemon.metrics.height}
+            weight={pokemon.metrics.weight}
           />
-          <p className="mt-6">{aboutText}</p>
+          <p className="mt-6">{pokemon.description}</p>
         </div>
 
         {/* Tabs */}
@@ -72,9 +72,9 @@ function IndividualPokemonPage() {
           />
         ) : null}
 
-        {currentTab === 'Evolution' ? (
+        {/* {currentTab === 'Evolution' ? (
           <EvolutionChain data={evolutionChainData} />
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   );

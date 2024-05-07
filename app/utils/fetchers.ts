@@ -3,9 +3,8 @@ import {
   PokemonDetailsAPiResponse,
   SpeciesDataApiResponse,
 } from '~/types/api';
-import { PokemonListType } from '~/types/pokemon';
+import { PokemonData, PokemonListType } from '~/types/pokemon';
 import { extractEvolutionInfo } from './transformers';
-import { json } from '@remix-run/node';
 
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
@@ -98,9 +97,18 @@ export const fetchPokemonData = async (pokemon: string) => {
   );
   const tranformedData = extractEvolutionInfo(evolutionChainData);
 
-  return json({
-    pokemon: pokemonDetails,
-    specie,
-    evolutionChainData: tranformedData,
-  });
+  const data: PokemonData = {
+    id: pokemonDetails.id,
+    name: pokemonDetails.name,
+    imgUrl: pokemonDetails.sprites.other['official-artwork'].front_default,
+    types: pokemonDetails.types,
+    metrics: {
+      height: pokemonDetails.height,
+      weight: pokemonDetails.weight,
+    },
+    description: specie.flavor_text_entries[0].flavor_text,
+    stats: pokemonDetails.stats,
+  };
+
+  return data;
 };

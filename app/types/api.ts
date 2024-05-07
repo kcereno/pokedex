@@ -1,4 +1,4 @@
-import { Pokemon } from './pokemon';
+import { Pokemon, PokemonStats, PokemonTypes } from './pokemon';
 
 export type PokemonAPIResponse = {
   count: number;
@@ -6,17 +6,6 @@ export type PokemonAPIResponse = {
   previous: null;
   results: Pokemon[];
 };
-
-export type PokemonTypes = {
-  type: {
-    name: string;
-  };
-}[];
-
-export type PokemonStats = {
-  base_stat: number;
-  stat: { name: string };
-}[];
 
 export type PokemonDetailsAPiResponse = {
   id: number;
