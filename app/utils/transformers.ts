@@ -45,8 +45,6 @@ export function extractEvolutionData(
   }
 
   function traverseChain(chain: ChainLink) {
-    const speciesArray: EvolutionChainLink[] = [];
-
     const nextSpeciesName =
       chain.evolves_to.length > 0 ? chain.evolves_to[0].species.name : null;
 
@@ -73,9 +71,12 @@ export function extractEvolutionData(
     chain.evolves_to.forEach((evolvesTo) => traverseChain(evolvesTo));
   }
 
-  const updatedChain = !isEevee
-    ? traverseChain(evolutionChain.chain)
-    : processEeveeEvolution(evolutionChain.chain);
+  if (!isEevee) {
+    traverseChain(evolutionChain.chain);
+  } else {
+    processEeveeEvolution(evolutionChain.chain);
+  }
+
   return speciesArray;
 }
 
