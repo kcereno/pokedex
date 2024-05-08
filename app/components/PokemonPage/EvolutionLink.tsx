@@ -1,3 +1,4 @@
+import { Link } from '@remix-run/react';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { Colors } from '~/types/general';
 import { EvolutionChainLink } from '~/types/pokemon';
@@ -20,26 +21,28 @@ function EvolutionLink({
   return (
     <div className={`grid grid-cols-3 font-semibold ${colors.text} py-4`}>
       <div className="flex flex-col items-center justify-center">
-        <img
-          src={currentPokemon.imgUrl}
-          alt=""
-          className="max-h-24"
-        />
-        <span className="capitalize">{currentPokemon.name}</span>
+        <Link to={`/${currentPokemon.name}`}>
+          <img
+            src={currentPokemon.imgUrl}
+            alt=""
+            className="max-h-24"
+          />
+          <span className="capitalize">{currentPokemon.name}</span>
+        </Link>
       </div>
       <div className="flex flex-col items-center justify-center">
         <FaLongArrowAltRight className="size-10 text-slate-600" />
         <span className="text-transform: capitalize">{triggerText}</span>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <div className="">
+        <Link to={`/${nextPokemon.name}`}>
           <img
             src={nextPokemon.imgUrl}
             alt=""
             className="max-h-24"
           />
           <span className="capitalize">{nextPokemon.name}</span>
-        </div>
+        </Link>
       </div>
     </div>
   );
