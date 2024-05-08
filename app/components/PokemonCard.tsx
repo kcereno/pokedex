@@ -11,6 +11,9 @@ function PokemonCard({ name, number, photoUrl, type }: PokemonListEntryType) {
     <li
       key={number}
       className={`p-4 pb-2 border w-full rounded-xl max-h-30 drop-shadow-2xl ${bgColor} flex flex-col`}
+      style={{
+        backgroundImage: 'url("/public/assets/backgrounds/circles.png")',
+      }}
     >
       <Link to={name}>
         <div className="flex justify-between items-center">

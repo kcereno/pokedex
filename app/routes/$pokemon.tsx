@@ -34,7 +34,12 @@ function IndividualPokemonPage() {
   const tabs: TabTypes[] = ['Base Stats', 'Evolution'];
 
   return (
-    <div className={`flex flex-col min-h-screen ${colors.bg}`}>
+    <div
+      className={`flex flex-col min-h-screen ${colors.bg} `}
+      style={{
+        backgroundImage: 'url("/public/assets/backgrounds/flowers.png")',
+      }}
+    >
       <Nav />
       <HeaderAndImage
         id={pokemon.id}

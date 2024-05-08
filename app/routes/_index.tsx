@@ -1,9 +1,7 @@
 import { json, type MetaFunction } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
-
 import { PokemonListType } from '~/types/pokemon';
 import { fetchPokemonList } from '~/utils/fetchers';
-
 import PokemonGrid from '~/components/PokemonGrid';
 import Nav from '~/components/Nav';
 import Searchbar from '~/components/Searchbar';
