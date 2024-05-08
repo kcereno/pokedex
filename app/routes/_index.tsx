@@ -8,12 +8,11 @@ import PokemonGrid from '~/components/PokemonGrid';
 import Nav from '~/components/Nav';
 import Searchbar from '~/components/Searchbar';
 import { useState } from 'react';
-import { c } from 'node_modules/vite/dist/node/types.d-aGj9QkWt';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: 'New Remix App' },
-    { name: 'description', content: 'Welcome to Remix!' },
+    { title: 'Pokedex' },
+    { name: 'description', content: 'A PokeAPI project' },
   ];
 };
 
@@ -36,16 +35,12 @@ export default function Index() {
     setPokemonList(filteredList);
   };
 
-  // const navigation = useNavigation();
-
-  // const isLoading = navigation.state === 'loading';
-
   return (
     <div className="min-h-screen flex flex-col">
       <Nav />
       <main>
         <Searchbar filterPokemon={filterPokemon} />
-        {/* TODO: Add Loading Spinner  */}
+
         {pokemonList.length > 0 ? (
           <PokemonGrid pokemon={pokemonList} />
         ) : (
