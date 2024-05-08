@@ -25,7 +25,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 function IndividualPokemonPage() {
   const [currentTab, setCurrentTab] = useState<TabTypes>('Evolution');
   const { pokemon } = useLoaderData<typeof loader>();
-  console.log('IndividualPokemonPage ~ pokemon:', pokemon);
 
   const colors = {
     text: pokemonTypeColors[pokemon.types[0].type.name].textColor,

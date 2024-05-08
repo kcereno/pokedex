@@ -18,9 +18,35 @@ export function decimetersToFeet(decimeters: number): number {
 export function extractEvolutionData(
   evolutionChain: EvolutionChainApiResponse
 ): EvolutionChainLink[] {
+  const isEevee = evolutionChain.chain.species.name === 'eevee';
   const speciesArray: EvolutionChainLink[] = [];
 
+  function processEeveeEvolution(chain: ChainLink) {
+    const evolutions = ['flareon', 'jolteon', 'vaporeon'];
+
+    chain.evolves_to.forEach((entry) => {
+      const pokemonName = entry.species.name;
+      if (evolutions.includes(pokemonName)) {
+        const triggerType = entry.evolution_details[0].trigger?.name ?? null;
+        const item = entry.evolution_details[0].item?.name ?? null;
+
+        const data: EvolutionChainLink = {
+          currentPokemon: {
+            name: 'eevee',
+          },
+          nextPokemon: {
+            name: entry.species.name,
+          },
+          trigger: { min_level: null, type: triggerType, item },
+        };
+        speciesArray.push(data);
+      }
+    });
+  }
+
   function traverseChain(chain: ChainLink) {
+    const speciesArray: EvolutionChainLink[] = [];
+
     const nextSpeciesName =
       chain.evolves_to.length > 0 ? chain.evolves_to[0].species.name : null;
 
@@ -47,6 +73,12 @@ export function extractEvolutionData(
     chain.evolves_to.forEach((evolvesTo) => traverseChain(evolvesTo));
   }
 
-  traverseChain(evolutionChain.chain);
+  const updatedChain = !isEevee
+    ? traverseChain(evolutionChain.chain)
+    : processEeveeEvolution(evolutionChain.chain);
   return speciesArray;
 }
+
+export const removeHyphens = (string: string) => {
+  return string.replace(/-/g, ' ');
+};

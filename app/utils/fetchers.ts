@@ -95,6 +95,7 @@ export const fetchPokemonData = async (pokemon: string) => {
     pokemon
   );
   const evolutionChainUrl = species.evolution_chain.url;
+  console.log('fetchPokemonData ~ evolutionChainUrl:', evolutionChainUrl);
 
   const pokemonEvolutionApiData: EvolutionChainApiResponse = await fetchFromUrl(
     evolutionChainUrl
