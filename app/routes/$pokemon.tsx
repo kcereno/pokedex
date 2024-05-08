@@ -27,13 +27,15 @@ function IndividualPokemonPage() {
   const { pokemon } = useLoaderData<typeof loader>();
   console.log('IndividualPokemonPage ~ pokemon:', pokemon);
 
-  const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
-  const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
+  const colors = {
+    text: pokemonTypeColors[pokemon.types[0].type.name].textColor,
+    bg: pokemonTypeColors[pokemon.types[0].type.name].bgColor,
+  };
 
   const tabs: TabTypes[] = ['Base Stats', 'Evolution'];
 
   return (
-    <div className={`flex flex-col min-h-screen ${bgColor}`}>
+    <div className={`flex flex-col min-h-screen ${colors.bg}`}>
       <Nav />
       <HeaderAndImage
         id={pokemon.id}
@@ -46,7 +48,7 @@ function IndividualPokemonPage() {
 
         {/* About */}
         <div className="flex flex-col items-center my-6">
-          <h2 className={`font-semibold text-xl tracking-tight ${textColor}`}>
+          <h2 className={`font-semibold text-xl tracking-tight ${colors.text}`}>
             About
           </h2>
           <Metrics
@@ -59,7 +61,7 @@ function IndividualPokemonPage() {
         {/* Tabs */}
         <Tabs
           tabs={tabs}
-          textColor={textColor}
+          textColor={colors.text}
           currentTab={currentTab}
           updateTab={(tab) => {
             setCurrentTab(tab);
@@ -70,15 +72,15 @@ function IndividualPokemonPage() {
         {currentTab === 'Base Stats' ? (
           <BaseStats
             stats={pokemon.stats}
-            colors={{
-              text: textColor,
-              bg: bgColor,
-            }}
+            colors={colors}
           />
         ) : null}
 
         {currentTab === 'Evolution' ? (
-          <EvolutionChain data={pokemon.evolutionData} />
+          <EvolutionChain
+            data={pokemon.evolutionData}
+            colors={colors}
+          />
         ) : null}
       </div>
     </div>

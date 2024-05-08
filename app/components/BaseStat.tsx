@@ -21,6 +21,8 @@ const statAbbreviations: {
 function BaseStat({ label, colors, value }: BaseStatProps) {
   const statAbbreviation = statAbbreviations[label];
 
+  const statValue = value > 100 ? 100 : value;
+
   return (
     <div className="grid grid-cols-[50px,1fr] ">
       <div
@@ -34,8 +36,8 @@ function BaseStat({ label, colors, value }: BaseStatProps) {
         </span>
         <div className={'w-full bg-gray-300 rounded-full ml-2'}>
           <div
-            className={`h-2 ${colors.text} rounded-full`}
-            style={{ width: `${value}%` }}
+            className={`h-2 ${colors.bg} rounded-full`}
+            style={{ width: `${statValue}%` }}
           ></div>
         </div>
       </div>
