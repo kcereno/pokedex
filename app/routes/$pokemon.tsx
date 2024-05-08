@@ -78,7 +78,7 @@ function IndividualPokemonPage() {
 
         {currentTab === 'Evolution' ? (
           <EvolutionChain
-            data={pokemon.evolutionData}
+            evolutionChain={pokemon.evolutionChain}
             colors={colors}
           />
         ) : null}

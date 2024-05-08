@@ -1,16 +1,21 @@
 import { Colors } from '~/types/general';
-import { EvolutionData } from '../../types/pokemon';
+import { EvolutionChainLink } from '../../types/pokemon';
+import EvolutionLink from './EvolutionLink';
 
 type EvolutionChainProps = {
-  data: EvolutionData[];
+  evolutionChain: EvolutionChainLink[];
   colors: Colors;
 };
 
-function EvolutionChain({ data, colors }: EvolutionChainProps) {
-  console.log('EvolutionChain ~ data:', data);
+function EvolutionChain({ evolutionChain, colors }: EvolutionChainProps) {
   return (
     <div>
-      <div className={``}>Evolution Chain</div>
+      {evolutionChain.map((chainLink) => (
+        <EvolutionLink
+          key={chainLink.currentPokemon.name}
+          chainLink={chainLink}
+        />
+      ))}
     </div>
   );
 }

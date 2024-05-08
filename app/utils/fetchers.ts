@@ -3,7 +3,11 @@ import {
   PokemonDetailsAPiResponse,
   SpeciesDataApiResponse,
 } from '~/types/api';
-import { EvolutionData, PokemonData, PokemonListType } from '~/types/pokemon';
+import {
+  EvolutionChainLink,
+  PokemonData,
+  PokemonListType,
+} from '~/types/pokemon';
 import { extractEvolutionData } from './transformers';
 
 export const fetchPokemonList = async () => {
@@ -86,32 +90,30 @@ export const fetchFromUrl = async (url: string) => {
 };
 
 export const fetchPokemonData = async (pokemon: string) => {
-  const pokemonDetails: PokemonDetailsAPiResponse = await fetchPokemonDetails(
+  const details: PokemonDetailsAPiResponse = await fetchPokemonDetails(pokemon);
+  const species: SpeciesDataApiResponse = await fetchPokemonSpeciesData(
     pokemon
   );
-  const pokemonSpecieData: SpeciesDataApiResponse =
-    await fetchPokemonSpeciesData(pokemon);
-  const evolutionChainUrl = pokemonSpecieData.evolution_chain.url;
+  const evolutionChainUrl = species.evolution_chain.url;
 
   const pokemonEvolutionApiData: EvolutionChainApiResponse = await fetchFromUrl(
     evolutionChainUrl
   );
 
-  const evolutionData: EvolutionData[] = extractEvolutionData(
+  const evolutionChain: EvolutionChainLink[] = extractEvolutionData(
     pokemonEvolutionApiData
   );
 
-  console.log('fetchPokemonData ~ evolutionData:', evolutionData);
-  const evolutionDataWithImgUrl: EvolutionData[] = await Promise.all(
-    evolutionData.map(async (entry) => {
-      const currentPokemonDetails: PokemonDetailsAPiResponse | null = entry
+  const evolutionDataWithImgUrl: EvolutionChainLink[] = await Promise.all(
+    evolutionChain.map(async (chainLink) => {
+      const currentPokemonDetails: PokemonDetailsAPiResponse | null = chainLink
         .currentPokemon.name
-        ? await fetchPokemonDetails(entry.currentPokemon.name)
+        ? await fetchPokemonDetails(chainLink.currentPokemon.name)
         : null;
 
-      const nextPokemonDetails: PokemonDetailsAPiResponse | null = entry
+      const nextPokemonDetails: PokemonDetailsAPiResponse | null = chainLink
         .nextPokemon.name
-        ? await fetchPokemonDetails(entry.nextPokemon.name)
+        ? await fetchPokemonDetails(chainLink.nextPokemon.name)
         : null;
 
       const currentPokemonImgUrl =
@@ -120,17 +122,17 @@ export const fetchPokemonData = async (pokemon: string) => {
       const nextImagePokemonUrl =
         nextPokemonDetails?.sprites.other['official-artwork'].front_default;
 
-      const updatedObj: EvolutionData = {
+      const updatedObj: EvolutionChainLink = {
         currentPokemon: {
-          ...entry.currentPokemon,
+          ...chainLink.currentPokemon,
           imgUrl: currentPokemonImgUrl,
         },
         nextPokemon: {
-          ...entry.nextPokemon,
+          ...chainLink.nextPokemon,
           imgUrl: nextImagePokemonUrl,
         },
         trigger: {
-          ...entry.trigger,
+          ...chainLink.trigger,
         },
       };
       return updatedObj;
@@ -138,17 +140,17 @@ export const fetchPokemonData = async (pokemon: string) => {
   );
 
   const data: PokemonData = {
-    id: pokemonDetails.id,
-    name: pokemonDetails.name,
-    imgUrl: pokemonDetails.sprites.other['official-artwork'].front_default,
-    types: pokemonDetails.types,
+    id: details.id,
+    name: details.name,
+    imgUrl: details.sprites.other['official-artwork'].front_default,
+    types: details.types,
     metrics: {
-      height: pokemonDetails.height,
-      weight: pokemonDetails.weight,
+      height: details.height,
+      weight: details.weight,
     },
-    description: pokemonSpecieData.flavor_text_entries[0].flavor_text,
-    stats: pokemonDetails.stats,
-    evolutionData: evolutionDataWithImgUrl,
+    description: species.flavor_text_entries[0].flavor_text,
+    stats: details.stats,
+    evolutionChain: evolutionDataWithImgUrl,
   };
 
   return data;

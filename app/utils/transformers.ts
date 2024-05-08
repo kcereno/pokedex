@@ -1,5 +1,5 @@
 import { EvolutionChainApiResponse } from '~/types/api';
-import { ChainLink, EvolutionData } from '~/types/pokemon';
+import { ChainLink, EvolutionChainLink } from '~/types/pokemon';
 
 export function transformToThreeDigits(number: number): string {
   return number.toString().padStart(3, '0');
@@ -17,8 +17,8 @@ export function decimetersToFeet(decimeters: number): number {
 
 export function extractEvolutionData(
   evolutionChain: EvolutionChainApiResponse
-): EvolutionData[] {
-  const speciesArray: EvolutionData[] = [];
+): EvolutionChainLink[] {
+  const speciesArray: EvolutionChainLink[] = [];
 
   function traverseChain(chain: ChainLink) {
     const nextSpeciesName =
@@ -32,7 +32,7 @@ export function extractEvolutionData(
 
     const item = chain.evolves_to[0]?.evolution_details[0]?.item?.name ?? null;
 
-    const data: EvolutionData = {
+    const data: EvolutionChainLink = {
       currentPokemon: {
         name: chain.species.name,
       },

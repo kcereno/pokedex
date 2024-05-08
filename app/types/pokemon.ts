@@ -20,7 +20,7 @@ export type PokemonData = {
   };
   description: string;
   stats: PokemonStats;
-  evolutionData: EvolutionData[];
+  evolutionChain: EvolutionChainLink[];
 };
 export type Pokemon = {
   name: string | null;
@@ -56,7 +56,7 @@ type PokemonSpecies = {
   url: string;
 };
 
-export type EvolutionData = {
+export type EvolutionChainLink = {
   currentPokemon: Pokemon;
   nextPokemon: Pokemon;
   trigger: {
