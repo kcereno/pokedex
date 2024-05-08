@@ -2,9 +2,9 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 function Nav() {
   return (
-    <div className="flex pt-6 px-6">
+    <div className="flex p-6 pb-2">
       <a href={'/'}>
-        <FaArrowLeft className="text-xl text-white" />
+        <FaArrowLeft className="size-6 text-white" />
       </a>
     </div>
   );

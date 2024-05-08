@@ -23,7 +23,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 function IndividualPokemonPage() {
-  const [currentTab, setCurrentTab] = useState<TabTypes>('Evolution');
+  const [currentTab, setCurrentTab] = useState<TabTypes>('Base Stats');
   const { pokemon } = useLoaderData<typeof loader>();
 
   const colors = {
