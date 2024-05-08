@@ -37,7 +37,7 @@ function IndividualPokemonPage() {
     <div
       className={`flex flex-col min-h-screen ${colors.bg} `}
       style={{
-        backgroundImage: 'url("/public/assets/backgrounds/flowers.png")',
+        backgroundImage: 'url("/assets/backgrounds/flowers.png")',
       }}
     >
       <Nav />
