@@ -1,4 +1,4 @@
-import { Pokemon, PokemonStats, PokemonTypes } from './pokemon';
+import { ChainLink, Pokemon, PokemonStats, PokemonTypes } from './pokemon';
 
 export type PokemonAPIResponse = {
   count: number;
@@ -32,36 +32,6 @@ export type SpeciesDataApiResponse = {
   }[];
 };
 
-export type Chain = {
-  evolution_details: EvolutionDetails[];
-  evolves_to: Chain[];
-  is_baby: boolean;
-  species: Species;
-};
-
-type EvolutionDetails = {
-  min_level: number;
-  trigger: Trigger;
-  item: Item | null;
-};
-
-type Trigger = {
-  name: string;
-  url: string;
-};
-
-type Item = {
-  name: string | null;
-  url: string | null;
-};
-
-type Species = {
-  name: string;
-  url: string;
-};
-
 export type EvolutionChainApiResponse = {
-  baby_trigger_item: string | null;
-  chain: Chain;
-  id: number;
+  chain: ChainLink;
 };

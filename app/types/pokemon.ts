@@ -21,10 +21,9 @@ export type PokemonData = {
   description: string;
   stats: PokemonStats;
 };
-
-export type Pokemon = {
-  name: string;
-  url: string;
+type Pokemon = {
+  name: string | null;
+  url: string | null;
 };
 
 export type PokemonListEntryType = {
@@ -36,15 +35,31 @@ export type PokemonListEntryType = {
 
 export type PokemonListType = PokemonListEntryType[];
 
-export type EvolutionData = {
-  pokemon: {
+export type ChainLink = {
+  evolves_to: ChainLink[];
+  evolution_details: EvolutionDetail[];
+  species: PokemonSpecies;
+};
+
+type EvolutionDetail = {
+  min_level?: number | null;
+  trigger?: { name: string };
+  item?: {
     name: string;
-    url: string;
   };
-  item: {
-    name: string | null;
-    url: string | null;
+};
+
+type PokemonSpecies = {
+  name: string;
+  url: string;
+};
+
+export type EvolutionData = {
+  currentPokemon: Pokemon;
+  nextPokemon: Pokemon;
+  trigger: {
+    min_level: number | null;
+    type: string | null;
+    item: string | null;
   };
-  min_level: number;
-  trigger: string;
 };

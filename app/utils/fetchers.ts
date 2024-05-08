@@ -4,7 +4,7 @@ import {
   SpeciesDataApiResponse,
 } from '~/types/api';
 import { PokemonData, PokemonListType } from '~/types/pokemon';
-import { extractEvolutionInfo } from './transformers';
+import { extractEvolutionData, extractEvolutionInfo } from './transformers';
 
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
@@ -89,13 +89,17 @@ export const fetchPokemonData = async (pokemon: string) => {
   const pokemonDetails: PokemonDetailsAPiResponse = await fetchPokemonDetails(
     pokemon
   );
-  const specie: SpeciesDataApiResponse = await fetchPokemonSpeciesData(pokemon);
-  const evolutionChainUrl = specie.evolution_chain.url;
+  const pokemonSpecieData: SpeciesDataApiResponse =
+    await fetchPokemonSpeciesData(pokemon);
+  const evolutionChainUrl = pokemonSpecieData.evolution_chain.url;
+  console.log('fetchPokemonData ~ evolutionChainUrl:', evolutionChainUrl);
 
-  const evolutionChainData: EvolutionChainApiResponse = await fetchFromUrl(
+  const pokemonEvolutionApiData: EvolutionChainApiResponse = await fetchFromUrl(
     evolutionChainUrl
   );
-  const tranformedData = extractEvolutionInfo(evolutionChainData);
+
+  const tranformedData = extractEvolutionData(pokemonEvolutionApiData);
+  console.log('fetchPokemonData ~ tranformedData:', tranformedData);
 
   const data: PokemonData = {
     id: pokemonDetails.id,
@@ -106,7 +110,7 @@ export const fetchPokemonData = async (pokemon: string) => {
       height: pokemonDetails.height,
       weight: pokemonDetails.weight,
     },
-    description: specie.flavor_text_entries[0].flavor_text,
+    description: pokemonSpecieData.flavor_text_entries[0].flavor_text,
     stats: pokemonDetails.stats,
   };
 
