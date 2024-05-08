@@ -3,8 +3,8 @@ import {
   PokemonDetailsAPiResponse,
   SpeciesDataApiResponse,
 } from '~/types/api';
-import { PokemonData, PokemonListType } from '~/types/pokemon';
-import { extractEvolutionData, extractEvolutionInfo } from './transformers';
+import { EvolutionData, PokemonData, PokemonListType } from '~/types/pokemon';
+import { extractEvolutionData } from './transformers';
 
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
@@ -92,14 +92,50 @@ export const fetchPokemonData = async (pokemon: string) => {
   const pokemonSpecieData: SpeciesDataApiResponse =
     await fetchPokemonSpeciesData(pokemon);
   const evolutionChainUrl = pokemonSpecieData.evolution_chain.url;
-  console.log('fetchPokemonData ~ evolutionChainUrl:', evolutionChainUrl);
 
   const pokemonEvolutionApiData: EvolutionChainApiResponse = await fetchFromUrl(
     evolutionChainUrl
   );
 
-  const tranformedData = extractEvolutionData(pokemonEvolutionApiData);
-  console.log('fetchPokemonData ~ tranformedData:', tranformedData);
+  const evolutionData: EvolutionData[] = extractEvolutionData(
+    pokemonEvolutionApiData
+  );
+
+  console.log('fetchPokemonData ~ evolutionData:', evolutionData);
+  const evolutionDataWithImgUrl: EvolutionData[] = await Promise.all(
+    evolutionData.map(async (entry) => {
+      const currentPokemonDetails: PokemonDetailsAPiResponse | null = entry
+        .currentPokemon.name
+        ? await fetchPokemonDetails(entry.currentPokemon.name)
+        : null;
+
+      const nextPokemonDetails: PokemonDetailsAPiResponse | null = entry
+        .nextPokemon.name
+        ? await fetchPokemonDetails(entry.nextPokemon.name)
+        : null;
+
+      const currentPokemonImgUrl =
+        currentPokemonDetails?.sprites.other['official-artwork'].front_default;
+
+      const nextImagePokemonUrl =
+        nextPokemonDetails?.sprites.other['official-artwork'].front_default;
+
+      const updatedObj: EvolutionData = {
+        currentPokemon: {
+          ...entry.currentPokemon,
+          imgUrl: currentPokemonImgUrl,
+        },
+        nextPokemon: {
+          ...entry.nextPokemon,
+          imgUrl: nextImagePokemonUrl,
+        },
+        trigger: {
+          ...entry.trigger,
+        },
+      };
+      return updatedObj;
+    })
+  );
 
   const data: PokemonData = {
     id: pokemonDetails.id,
@@ -112,6 +148,7 @@ export const fetchPokemonData = async (pokemon: string) => {
     },
     description: pokemonSpecieData.flavor_text_entries[0].flavor_text,
     stats: pokemonDetails.stats,
+    evolutionData: evolutionDataWithImgUrl,
   };
 
   return data;

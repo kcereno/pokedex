@@ -4,3 +4,8 @@ export type NameUrlType = {
 };
 
 export type TabTypes = 'Base Stats' | 'Evolution';
+
+export type Colors = {
+  text: string;
+  bg: string;
+};

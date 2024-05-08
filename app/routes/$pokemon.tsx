@@ -13,6 +13,7 @@ import Tabs from '~/components/PokemonPage/Tabs';
 import BaseStats from '~/components/PokemonPage/BaseStats';
 
 import { PokemonData } from '~/types/pokemon';
+import EvolutionChain from '~/components/PokemonPage/EvolutionChain';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
@@ -22,8 +23,9 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 };
 
 function IndividualPokemonPage() {
-  const [currentTab, setCurrentTab] = useState<TabTypes>('Base Stats');
+  const [currentTab, setCurrentTab] = useState<TabTypes>('Evolution');
   const { pokemon } = useLoaderData<typeof loader>();
+  console.log('IndividualPokemonPage ~ pokemon:', pokemon);
 
   const bgColor = pokemonTypeColors[pokemon.types[0].type.name].bgColor;
   const textColor = pokemonTypeColors[pokemon.types[0].type.name].textColor;
@@ -68,13 +70,16 @@ function IndividualPokemonPage() {
         {currentTab === 'Base Stats' ? (
           <BaseStats
             stats={pokemon.stats}
-            bgColor={bgColor}
+            colors={{
+              text: textColor,
+              bg: bgColor,
+            }}
           />
         ) : null}
 
-        {/* {currentTab === 'Evolution' ? (
-          <EvolutionChain data={evolutionChainData} />
-        ) : null} */}
+        {currentTab === 'Evolution' ? (
+          <EvolutionChain data={pokemon.evolutionData} />
+        ) : null}
       </div>
     </div>
   );

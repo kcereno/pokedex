@@ -20,10 +20,12 @@ export type PokemonData = {
   };
   description: string;
   stats: PokemonStats;
+  evolutionData: EvolutionData[];
 };
-type Pokemon = {
+export type Pokemon = {
   name: string | null;
-  url: string | null;
+  url?: string | null;
+  imgUrl?: string;
 };
 
 export type PokemonListEntryType = {

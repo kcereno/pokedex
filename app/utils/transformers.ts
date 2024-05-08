@@ -23,8 +23,6 @@ export function extractEvolutionData(
   function traverseChain(chain: ChainLink) {
     const nextSpeciesName =
       chain.evolves_to.length > 0 ? chain.evolves_to[0].species.name : null;
-    const nextSpeciesUrl =
-      chain.evolves_to.length > 0 ? chain.evolves_to[0].species.url : null;
 
     const min_level =
       chain.evolves_to[0]?.evolution_details[0]?.min_level ?? null;
@@ -37,11 +35,9 @@ export function extractEvolutionData(
     const data: EvolutionData = {
       currentPokemon: {
         name: chain.species.name,
-        url: chain.species.url,
       },
       nextPokemon: {
         name: nextSpeciesName,
-        url: nextSpeciesUrl,
       },
       trigger: { min_level, type: triggerType, item },
     };

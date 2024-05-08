@@ -1,12 +1,13 @@
+import { Colors } from '~/types/general';
 import BaseStat from '../BaseStat';
-import { PokemonStats } from '~/types/api';
+import { PokemonStats } from '~/types/pokemon';
 
 type BaseStatsProps = {
   stats: PokemonStats;
-  bgColor: string;
+  colors: Colors;
 };
 
-function BaseStats({ stats, bgColor }: BaseStatsProps) {
+function BaseStats({ stats, colors }: BaseStatsProps) {
   return (
     <div>
       {stats.map((stat) => (
@@ -14,7 +15,7 @@ function BaseStats({ stats, bgColor }: BaseStatsProps) {
           key={stat.stat.name}
           label={stat.stat.name}
           value={stat.base_stat}
-          color={bgColor}
+          colors={colors}
         />
       ))}
     </div>
