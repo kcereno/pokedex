@@ -9,14 +9,16 @@ type PokemonGridProps = {
 
 function PokemonGrid({ className = '', pokemon }: PokemonGridProps) {
   return (
-    <ul className={twMerge('grid grid-cols-2 p-4 gap-2', className)}>
-      {pokemon.map((pokemon) => (
-        <PokemonCard
-          key={pokemon.number}
-          {...pokemon}
-        />
-      ))}
-    </ul>
+    <div className="md:h-[700px] overflow-auto">
+      <ul className={twMerge('grid grid-cols-2 p-4 gap-2', className)}>
+        {pokemon.map((pokemon) => (
+          <PokemonCard
+            key={pokemon.number}
+            {...pokemon}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
 

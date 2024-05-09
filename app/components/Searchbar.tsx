@@ -13,7 +13,7 @@ const Searchbar = ({ filterPokemon }: SearchBarProps) => {
   };
 
   return (
-    <form className="flex items-center mx-auto p-4 pb-0">
+    <form className="flex items-center mx-auto p-4  w-full">
       <label
         htmlFor="simple-search"
         className="sr-only"

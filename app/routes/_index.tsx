@@ -34,11 +34,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
       <Nav />
+      <Searchbar filterPokemon={filterPokemon} />
       <main>
-        <Searchbar filterPokemon={filterPokemon} />
-
         {pokemonList.length > 0 ? (
           <PokemonGrid pokemon={pokemonList} />
         ) : (
@@ -47,6 +46,6 @@ export default function Index() {
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 }
