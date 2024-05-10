@@ -19,6 +19,13 @@ export function capitalizeString(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+export const lowercaseFirstLetter = (str: string): string => {
+  if (str.length === 0) {
+    return str; // If the string is empty, return it as is
+  }
+  return str.charAt(0).toLowerCase() + str.slice(1); // Lowercase the first letter and concatenate the rest of the string
+};
+
 export function extractEvolutionData(
   evolutionChain: EvolutionChainApiResponse
 ): EvolutionChainLink[] {

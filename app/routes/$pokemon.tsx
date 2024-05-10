@@ -14,11 +14,14 @@ import BaseStats from '~/components/PokemonPage/BaseStats';
 
 import { PokemonData } from '~/types/pokemon';
 import EvolutionChain from '~/components/PokemonPage/EvolutionChain';
+import { lowercaseFirstLetter } from '~/utils/transformers';
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.pokemon, 'Wrong ID');
 
-  const data: PokemonData = await fetchPokemonData(params.pokemon);
+  const data: PokemonData = await fetchPokemonData(
+    lowercaseFirstLetter(params.pokemon)
+  );
   return json({ pokemon: data });
 };
 
