@@ -38,7 +38,7 @@ function IndividualPokemonPage() {
 
   return (
     <div
-      className={`flex flex-col ${colors.bg} iphone:rounded-xl `}
+      className={`flex flex-col ${colors.bg} iphone:rounded-xl w-full`}
       style={{
         backgroundImage: 'url("/assets/backgrounds/flowers.png")',
       }}
