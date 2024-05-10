@@ -22,6 +22,7 @@ export const loader = async () => {
 
 export default function Index() {
   const { pokemon } = useLoaderData<typeof loader>();
+  console.log('Index ~ pokemon:', pokemon);
   const [pokemonList, setPokemonList] = useState(pokemon);
 
   const filterPokemon = (query: string) => {

@@ -1,14 +1,19 @@
 '@remix-run/react';
 
+import { useState } from 'react';
 import { CgPokemon } from 'react-icons/cg';
+import { capitalizeString } from '~/utils/transformers';
 
 type SearchBarProps = {
   filterPokemon: (query: string) => void;
 };
 
 const Searchbar = ({ filterPokemon }: SearchBarProps) => {
+  const [value, setValue] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
+    const query = capitalizeString(e.target.value);
+    setValue(query);
     filterPokemon(query);
   };
 
@@ -31,6 +36,7 @@ const Searchbar = ({ filterPokemon }: SearchBarProps) => {
           placeholder="Search Pokemon name or number"
           required
           onChange={handleChange}
+          value={value}
         />
       </div>
     </form>

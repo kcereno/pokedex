@@ -8,7 +8,7 @@ import {
   PokemonData,
   PokemonListType,
 } from '~/types/pokemon';
-import { extractEvolutionData } from './transformers';
+import { capitalizeString, extractEvolutionData } from './transformers';
 
 export const fetchPokemonList = async () => {
   const api = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
@@ -46,7 +46,7 @@ export const fetchPokemonList = async () => {
 
         return {
           number: index + 1,
-          name: entry.name,
+          name: capitalizeString(entry.name),
           photoUrl,
           type,
         };

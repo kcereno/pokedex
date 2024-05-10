@@ -15,6 +15,10 @@ export function decimetersToFeet(decimeters: number): number {
   return Math.round(decimeters * 0.328084 * 10) / 10;
 }
 
+export function capitalizeString(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function extractEvolutionData(
   evolutionChain: EvolutionChainApiResponse
 ): EvolutionChainLink[] {
