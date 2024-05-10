@@ -28,7 +28,7 @@ const SearchBar = ({ filterPokemon, sortPokemon }: SearchBarProps) => {
   };
 
   return (
-    <div className=" mx-auto p-4  w-full">
+    <div className=" mx-auto p-4 w-full bg-red-600">
       <div className="flex items-center">
         <label
           htmlFor="simple-search"
@@ -60,7 +60,7 @@ const SearchBar = ({ filterPokemon, sortPokemon }: SearchBarProps) => {
         </button>
       </div>
       {showSort ? (
-        <div className="mt-4">
+        <div className="mt-4 text-white">
           <div className="font-semibold">Sort By:</div>
           <div className="flex mt-2 gap-6 ml-4">
             <div className="flex items-center">

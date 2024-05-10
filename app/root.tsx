@@ -24,7 +24,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="max-w-md mx-auto md:border-2 md:my-20 md:rounded-xl">
+      <body className="max-w-[414px] mx-auto iphone:border-2 iphone:bg-slate-300 iphone:my-20 iphone:rounded-xl">
         {children}
         <ScrollRestoration />
         <Scripts />

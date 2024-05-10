@@ -38,7 +38,7 @@ function IndividualPokemonPage() {
 
   return (
     <div
-      className={`flex flex-col min-h-screen ${colors.bg} `}
+      className={`flex flex-col ${colors.bg} iphone:rounded-xl `}
       style={{
         backgroundImage: 'url("/assets/backgrounds/flowers.png")',
       }}
@@ -75,20 +75,22 @@ function IndividualPokemonPage() {
           }}
         />
 
-        {/* Tabs Content */}
-        {currentTab === 'Base Stats' ? (
-          <BaseStats
-            stats={pokemon.stats}
-            colors={colors}
-          />
-        ) : null}
+        <div className="iphone:border-b-xl">
+          {/* Tabs Content */}
+          {currentTab === 'Base Stats' ? (
+            <BaseStats
+              stats={pokemon.stats}
+              colors={colors}
+            />
+          ) : null}
 
-        {currentTab === 'Evolution' ? (
-          <EvolutionChain
-            evolutionChain={pokemon.evolutionChain}
-            colors={colors}
-          />
-        ) : null}
+          {currentTab === 'Evolution' ? (
+            <EvolutionChain
+              evolutionChain={pokemon.evolutionChain}
+              colors={colors}
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );
