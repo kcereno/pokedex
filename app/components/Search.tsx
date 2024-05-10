@@ -1,5 +1,3 @@
-'@remix-run/react';
-
 import { useState } from 'react';
 import { CgPokemon } from 'react-icons/cg';
 import { FaSort } from 'react-icons/fa';

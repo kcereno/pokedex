@@ -3,9 +3,9 @@ import { useLoaderData } from '@remix-run/react';
 import { PokemonListEntryType, PokemonListType } from '~/types/pokemon';
 import { fetchPokemonList } from '~/utils/fetchers';
 import PokemonGrid from '~/components/PokemonGrid';
+import Search from '~/components/Search';
 import Nav from '~/components/Nav';
 import { useState } from 'react';
-import SearchBar from '~/components/SearchBar';
 
 export const meta: MetaFunction = () => {
   return [
@@ -50,7 +50,7 @@ export default function Index() {
   return (
     <>
       <Nav />
-      <SearchBar
+      <Search
         filterPokemon={filterPokemon}
         sortPokemon={sortPokemon}
       />
